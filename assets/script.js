@@ -7,7 +7,34 @@ document.getElementById('search-form').addEventListener('submit', function(event
   const city = document.getElementById('city-input').value;
   fetchWeather(city);
 });
+// Function to load search history from local storage
+function loadSearchHistory() {
 
+  // Get the element where search history will be displayed
+  const searchHistoryContainer = document.getElementById('search-history');
+
+  // Clear existing content
+  searchHistoryContainer.innerHTML = '';
+
+  // Iterate through each city in the search history
+  searchHistory.forEach(city => {
+    // Create a clickable option for each city
+    const cityOption = document.createElement('div');
+    cityOption.textContent = city;
+    cityOption.classList.add('search-history-item');
+    
+    // Add click event listener to perform search when clicked
+    cityOption.addEventListener('click', function() {
+      fetchWeather(city);
+    });
+    
+    // Append the city option to the search history container
+    searchHistoryContainer.appendChild(cityOption);
+  });
+}
+
+// Call the function to load and display search history when the page loads
+loadSearchHistory();
 function fetchWeather(city) {
   // Fetch current weather data
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
@@ -66,12 +93,15 @@ function displayForecast(data) {
   }
 }
 
-
   function addToSearchHistory(city) {
-  // Add city to search history
-   searchHistory.push(city);
-   // Update local storage with the updated search history
-   localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-
+    // Load search history from local storage
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
   
+    // Check if the city already exists in the search history
+    if (!searchHistory.includes(city)) {
+      // Add city to search history if it's not already present
+      searchHistory.push(city);
+      // Update local storage with the updated search history
+      localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+    }
   }

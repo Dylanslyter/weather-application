@@ -1,7 +1,10 @@
 body {
     font-family: Arial, sans-serif;
   }
-  
+  .search-history-item {
+    border: 1px solid rgb(101, 5, 82);
+    margin: 2px
+  }
   .container {
     max-width: 800px;
     margin: 0 auto;
